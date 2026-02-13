@@ -1,4 +1,4 @@
-/* Bible Fun v2.0.2 - Core Engine (Fixed Audio) */
+/* Bible Fun v2.0.3 - Core Engine (Fixed Audio) */
 /* Shared for Trivia, Fill in the Blank, Who Am I (Battle Mode: individuals = icon as name, teams = clan) */
 const GAME_ICONS = [
     { emoji: '🦁', label: 'Lion' }, { emoji: '🐻', label: 'Bear' }, { emoji: '🐼', label: 'Panda' },
@@ -24,6 +24,7 @@ const GameManager = {
     currentPlayerIndex: 0,
     audioUnlocked: false,
     soundAvailable: { correct: true, wrong: true }, // set false when a file fails to load
+    _voicesCache: [], // Mobile often loads voices async; cache after voiceschanged
 
     registerGame: function(id, instance) {
         this.games[id] = instance;
@@ -87,20 +88,45 @@ const GameManager = {
         s.play().catch(() => { this.soundAvailable[type] = false; runEnded(); });
     },
 
-    // Pick a voice based on menu "Voice: Male / Female" (browser voices vary by device).
-    getPreferredVoice: function(voices) {
-        if (!voices || !voices.length) return null;
-        const style = (document.getElementById('voice-style') || {}).value || 'male';
-        const en = v => v.lang.startsWith('en');
-        const enUS = v => v.lang.startsWith('en-US');
-        if (style === 'female') {
-            return voices.find(v => en(v) && (v.name.includes('Female') || v.name.includes('Samantha') || v.name.includes('Zira') || v.name.includes('Karen') || v.name.includes('Victoria') || v.name.includes('Woman'))) ||
-                voices.find(v => enUS(v)) ||
-                voices.find(v => en(v));
+    // Ensure voices are available (mobile loads them async; cache on voiceschanged).
+    getVoices: function() {
+        const list = window.speechSynthesis && speechSynthesis.getVoices();
+        if (list && list.length > 0) {
+            this._voicesCache = list;
+            return list;
         }
-        return voices.find(v => en(v) && (v.name.includes('Male') || v.name.includes('Daniel') || v.name.includes('James') || v.name.includes('David'))) ||
-            voices.find(v => enUS(v)) ||
-            voices.find(v => en(v));
+        return this._voicesCache.length ? this._voicesCache : list || [];
+    },
+
+    // Pick a voice based on menu "Voice: Male / Female". Include mobile voice names (iOS: Aaron, Fred, Alex = male; Samantha, Nicky = female).
+    getPreferredVoice: function(voices) {
+        const list = voices && voices.length ? voices : this.getVoices();
+        if (!list.length) return null;
+        const style = (document.getElementById('voice-style') || {}).value || 'male';
+        const en = v => v.lang && v.lang.startsWith('en');
+        const enUS = v => v.lang && (v.lang.startsWith('en-US') || v.lang.startsWith('en_US'));
+        const name = v => (v.name || '').toLowerCase();
+        const isMaleName = v => {
+            const n = name(v);
+            return n.includes('male') || n.includes('aaron') || n.includes('fred') || n.includes('alex') || n.includes('daniel') || n.includes('james') || n.includes('david') || n.includes('arthur') || n.includes('ralph') || n.includes('tom') || n.includes('gordon') || n.includes('rishi') || n.includes('thomas') || n.includes('xander') || n.includes('martin');
+        };
+        const isFemaleName = v => {
+            const n = name(v);
+            return n.includes('female') || n.includes('samantha') || n.includes('nicky') || n.includes('zira') || n.includes('karen') || n.includes('victoria') || n.includes('woman') || n.includes('martha') || n.includes('moira') || n.includes('tessa') || n.includes('catherine');
+        };
+        if (style === 'female') {
+            return list.find(v => en(v) && isFemaleName(v)) ||
+                list.find(v => enUS(v) && isFemaleName(v)) ||
+                list.find(v => enUS(v)) ||
+                list.find(v => en(v));
+        }
+        // Male: prefer named male, then any en-US that is not a known female (avoids defaulting to female on mobile).
+        return list.find(v => en(v) && isMaleName(v)) ||
+            list.find(v => enUS(v) && isMaleName(v)) ||
+            list.find(v => enUS(v) && !isFemaleName(v)) ||
+            list.find(v => enUS(v)) ||
+            list.find(v => en(v) && !isFemaleName(v)) ||
+            list.find(v => en(v));
     },
 
     _readQuestionTimeout: null,
@@ -117,7 +143,7 @@ const GameManager = {
         u.rate = 0.88;
         u.pitch = 1;
         u.volume = 1;
-        const voices = speechSynthesis.getVoices();
+        const voices = this.getVoices();
         const preferred = this.getPreferredVoice(voices);
         if (preferred) u.voice = preferred;
         u.onend = () => { if (onDone) onDone(); };
@@ -138,7 +164,7 @@ const GameManager = {
             u.rate = 0.82;
             u.pitch = 1;
             u.volume = 1;
-            const voices = speechSynthesis.getVoices();
+            const voices = self.getVoices();
             const preferred = self.getPreferredVoice(voices);
             if (preferred) u.voice = preferred;
             speechSynthesis.speak(u);
@@ -269,7 +295,7 @@ const GameManager = {
         if (!window.speechSynthesis) { if (onDone) onDone(); return; }
         window.speechSynthesis.cancel();
         const opts = { rate: 0.82, pitch: 0.88, volume: 1 };
-        const voices = speechSynthesis.getVoices();
+        const voices = this.getVoices();
         const preferred = this.getPreferredVoice(voices);
         const speak = (str, endCb) => {
             const u = new SpeechSynthesisUtterance(str);
@@ -322,3 +348,11 @@ const GameManager = {
         }).join('');
     }
 };
+
+// Mobile: voices load async; cache when they become available so Male/Female selection works.
+if (window.speechSynthesis) {
+    GameManager.getVoices();
+    speechSynthesis.onvoiceschanged = function() {
+        GameManager.getVoices();
+    };
+}

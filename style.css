@@ -1,4 +1,4 @@
-/* Bible Fun v2.0.2 Master Stylesheet */
+/* Bible Fun v2.0.3 Master Stylesheet */
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -698,21 +698,40 @@ body {
 .j-header { background: rgba(20, 20, 55, 0.95); color: #f1c40f; font-size: 0.65rem; padding: 10px 2px; border-radius: 4px; border: 1px solid rgba(241, 196, 16, 0.4); min-width: 0; }
 .j-cell { background: rgba(40, 40, 90, 0.9); color: #f1c40f; font-size: 1.1rem; padding: 15px 2px; border-radius: 4px; cursor: pointer; border: 1px solid rgba(241, 196, 16, 0.35); transition: background 0.2s; min-width: 0; }
 
-/* Jeopardy board on portrait mobile: fit inside screen, no overflow */
+/* Jeopardy board on portrait mobile: raise board higher, fit screen, touch-friendly cells */
 @media (max-width: 600px) {
+    .game-container:has(#jeopardy-board:not(.hidden)) {
+        padding-top: 12px;
+    }
+    .game-container:has(#jeopardy-board:not(.hidden)) .menu-header {
+        margin-bottom: 12px;
+    }
+    #jeopardy-board {
+        padding-top: 0;
+    }
+    #j-turn-display {
+        margin-bottom: 8px;
+        gap: 8px;
+    }
+    #j-turn-display .player-score-box {
+        padding: 6px 8px;
+        font-size: 0.85rem;
+    }
     .jeopardy-grid {
         gap: 4px;
-        margin: 12px 0;
+        margin: 8px 0 12px;
     }
-    .j-header { font-size: 0.55rem; padding: 6px 1px; }
-    .j-cell { font-size: 0.75rem; padding: 8px 1px; }
+    .j-header { font-size: 0.55rem; padding: 6px 2px; min-height: 40px; display: flex; align-items: center; justify-content: center; }
+    .j-cell { font-size: 0.75rem; padding: 8px 2px; min-height: 44px; display: flex; align-items: center; justify-content: center; text-align: center; }
 }
 @media (max-width: 420px) {
+    #j-turn-display { margin-bottom: 6px; }
     .jeopardy-grid {
         gap: 3px;
+        margin: 6px 0 10px;
     }
-    .j-header { font-size: 0.5rem; padding: 4px 1px; }
-    .j-cell { font-size: 0.65rem; padding: 6px 1px; }
+    .j-header { font-size: 0.5rem; padding: 4px 1px; min-height: 36px; }
+    .j-cell { font-size: 0.65rem; padding: 6px 1px; min-height: 40px; }
 }
 .j-cell:hover { background: rgba(241, 196, 16, 0.2); }
 .j-cell.used { background: rgba(15, 15, 40, 0.95); color: transparent; cursor: default; border-color: rgba(241, 196, 16, 0.15); }
