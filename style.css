@@ -1,4 +1,4 @@
-/* Bible Fun v2.0.1 Master Stylesheet */
+/* Bible Fun v2.0.2 Master Stylesheet */
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -121,16 +121,16 @@ body {
     }
 }
 
-/* Portrait (narrow width): keep lights well inside left/right edges, not at screen edge */
+/* Portrait (narrow width): lights further out from B/N so they don’t cut through letters, but still in from screen edges */
 @media (max-width: 430px) {
     .splash-lights {
-        transform: scale(0.42);
+        transform: scale(0.52);
         transform-origin: center center;
     }
 }
 @media (max-width: 380px) {
     .splash-lights {
-        transform: scale(0.36);
+        transform: scale(0.46);
         transform-origin: center center;
     }
 }
@@ -681,15 +681,39 @@ body {
     margin: 0;
 }
 
-.jeopardy-grid {
-    display: grid;
-    grid-template-columns: repeat(6, 1fr); 
-    gap: 8px;
-    margin: 20px 0;
+#jeopardy-board {
+    max-width: 100%;
+    overflow-x: auto;
 }
 
-.j-header { background: rgba(20, 20, 55, 0.95); color: #f1c40f; font-size: 0.65rem; padding: 10px 2px; border-radius: 4px; border: 1px solid rgba(241, 196, 16, 0.4); }
-.j-cell { background: rgba(40, 40, 90, 0.9); color: #f1c40f; font-size: 1.1rem; padding: 15px 2px; border-radius: 4px; cursor: pointer; border: 1px solid rgba(241, 196, 16, 0.35); transition: background 0.2s; }
+.jeopardy-grid {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 8px;
+    margin: 20px 0;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+.j-header { background: rgba(20, 20, 55, 0.95); color: #f1c40f; font-size: 0.65rem; padding: 10px 2px; border-radius: 4px; border: 1px solid rgba(241, 196, 16, 0.4); min-width: 0; }
+.j-cell { background: rgba(40, 40, 90, 0.9); color: #f1c40f; font-size: 1.1rem; padding: 15px 2px; border-radius: 4px; cursor: pointer; border: 1px solid rgba(241, 196, 16, 0.35); transition: background 0.2s; min-width: 0; }
+
+/* Jeopardy board on portrait mobile: fit inside screen, no overflow */
+@media (max-width: 600px) {
+    .jeopardy-grid {
+        gap: 4px;
+        margin: 12px 0;
+    }
+    .j-header { font-size: 0.55rem; padding: 6px 1px; }
+    .j-cell { font-size: 0.75rem; padding: 8px 1px; }
+}
+@media (max-width: 420px) {
+    .jeopardy-grid {
+        gap: 3px;
+    }
+    .j-header { font-size: 0.5rem; padding: 4px 1px; }
+    .j-cell { font-size: 0.65rem; padding: 6px 1px; }
+}
 .j-cell:hover { background: rgba(241, 196, 16, 0.2); }
 .j-cell.used { background: rgba(15, 15, 40, 0.95); color: transparent; cursor: default; border-color: rgba(241, 196, 16, 0.15); }
 .j-answer-hint { font-size: 0.9rem; color: rgba(255, 255, 255, 0.8); margin: 0 0 12px; }

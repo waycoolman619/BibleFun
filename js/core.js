@@ -1,4 +1,4 @@
-/* Bible Fun v2.0.1 - Core Engine (Fixed Audio) */
+/* Bible Fun v2.0.2 - Core Engine (Fixed Audio) */
 /* Shared for Trivia, Fill in the Blank, Who Am I (Battle Mode: individuals = icon as name, teams = clan) */
 const GAME_ICONS = [
     { emoji: '🦁', label: 'Lion' }, { emoji: '🐻', label: 'Bear' }, { emoji: '🐼', label: 'Panda' },

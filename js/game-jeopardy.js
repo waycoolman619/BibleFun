@@ -1,4 +1,4 @@
-/* Bible Fun v2.0.1 - Jeopardy with Epic Video Intro */
+/* Bible Fun v2.0.2 - Jeopardy with Epic Video Intro */
 const JeopardyGame = {
     activeClue: null,
     topics: [], // Filled from BibleDatabase so every category has questions
