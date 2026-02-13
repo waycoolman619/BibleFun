@@ -1,0 +1,10 @@
+# Optional config (may contain API keys)
+js/config.js
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+*.log

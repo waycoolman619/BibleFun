@@ -1,0 +1,703 @@
+/* Bible Fun v2.0.0 Master Stylesheet */
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(160deg, #0a0a2e 0%, #1a1a4e 40%, #0d0d28 100%);
+    min-height: 100vh;
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 10px;
+}
+
+/* ========== SPLASH INTRO (Game Show style) ========== */
+#splash-intro {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    background: linear-gradient(160deg, #0a0a2e 0%, #1a1a4e 40%, #0d0d28 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+#splash-intro.hidden { display: none !important; }
+
+.splash-title-wrap {
+    position: relative;
+    display: inline-block;
+    padding: 0.15em 0;
+}
+
+.splash-lights {
+    position: absolute;
+    inset: -62px -208px;
+    pointer-events: none;
+}
+
+.splash-lights .light {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #f1c40f;
+    box-shadow: 0 0 15px rgba(241, 196, 16, 0.8), 0 0 30px rgba(241, 196, 16, 0.4);
+    top: 50%;
+    left: 50%;
+    margin-left: -6px;
+    margin-top: -6px;
+    animation: lightPulse 1.2s ease-in-out infinite;
+}
+
+/* 40 lights, equal spacing along rectangle (top 15, right 5, bottom 15, left 5) */
+.splash-lights .light:nth-child(1)  { --tx: -198px; --ty: -58px;  transform: translate(-198px, -58px);   animation-delay: 0s;      }
+.splash-lights .light:nth-child(2)  { --tx: -170px; --ty: -58px;  transform: translate(-170px, -58px);   animation-delay: 0.025s; }
+.splash-lights .light:nth-child(3)  { --tx: -141px; --ty: -58px;  transform: translate(-141px, -58px);   animation-delay: 0.05s;  }
+.splash-lights .light:nth-child(4)  { --tx: -113px; --ty: -58px;  transform: translate(-113px, -58px);   animation-delay: 0.075s; }
+.splash-lights .light:nth-child(5)  { --tx: -85px;  --ty: -58px;  transform: translate(-85px, -58px);    animation-delay: 0.1s;   }
+.splash-lights .light:nth-child(6)  { --tx: -56px;  --ty: -58px;  transform: translate(-56px, -58px);    animation-delay: 0.125s; }
+.splash-lights .light:nth-child(7)  { --tx: -28px;  --ty: -58px;  transform: translate(-28px, -58px);   animation-delay: 0.15s;  }
+.splash-lights .light:nth-child(8)  { --tx: 0px;    --ty: -58px;  transform: translate(0, -58px);       animation-delay: 0.175s; }
+.splash-lights .light:nth-child(9)  { --tx: 28px;   --ty: -58px;  transform: translate(28px, -58px);    animation-delay: 0.2s;   }
+.splash-lights .light:nth-child(10) { --tx: 56px;   --ty: -58px;  transform: translate(56px, -58px);    animation-delay: 0.225s; }
+.splash-lights .light:nth-child(11) { --tx: 85px;   --ty: -58px;  transform: translate(85px, -58px);    animation-delay: 0.25s;  }
+.splash-lights .light:nth-child(12) { --tx: 113px;  --ty: -58px;  transform: translate(113px, -58px);   animation-delay: 0.275s; }
+.splash-lights .light:nth-child(13) { --tx: 141px;  --ty: -58px;  transform: translate(141px, -58px);   animation-delay: 0.3s;   }
+.splash-lights .light:nth-child(14) { --tx: 170px;  --ty: -58px;  transform: translate(170px, -58px);   animation-delay: 0.325s; }
+.splash-lights .light:nth-child(15) { --tx: 198px;  --ty: -58px;  transform: translate(198px, -58px);   animation-delay: 0.35s;  }
+.splash-lights .light:nth-child(16) { --tx: 198px;  --ty: -29px;  transform: translate(198px, -29px);   animation-delay: 0.375s; }
+.splash-lights .light:nth-child(17) { --tx: 198px;  --ty: 0px;    transform: translate(198px, 0);       animation-delay: 0.4s;   }
+.splash-lights .light:nth-child(18) { --tx: 198px;  --ty: 29px;   transform: translate(198px, 29px);    animation-delay: 0.425s; }
+.splash-lights .light:nth-child(19) { --tx: 198px;  --ty: 58px;   transform: translate(198px, 58px);    animation-delay: 0.45s;  }
+.splash-lights .light:nth-child(20) { --tx: 170px;  --ty: 58px;   transform: translate(170px, 58px);    animation-delay: 0.475s; }
+.splash-lights .light:nth-child(21) { --tx: 141px;  --ty: 58px;   transform: translate(141px, 58px);    animation-delay: 0.5s;   }
+.splash-lights .light:nth-child(22) { --tx: 113px;  --ty: 58px;   transform: translate(113px, 58px);   animation-delay: 0.525s; }
+.splash-lights .light:nth-child(23) { --tx: 85px;   --ty: 58px;   transform: translate(85px, 58px);     animation-delay: 0.55s;  }
+.splash-lights .light:nth-child(24) { --tx: 56px;   --ty: 58px;   transform: translate(56px, 58px);     animation-delay: 0.575s; }
+.splash-lights .light:nth-child(25) { --tx: 28px;   --ty: 58px;   transform: translate(28px, 58px);    animation-delay: 0.6s;   }
+.splash-lights .light:nth-child(26) { --tx: 0px;    --ty: 58px;   transform: translate(0, 58px);        animation-delay: 0.625s; }
+.splash-lights .light:nth-child(27) { --tx: -28px;  --ty: 58px;   transform: translate(-28px, 58px);   animation-delay: 0.65s;  }
+.splash-lights .light:nth-child(28) { --tx: -56px;  --ty: 58px;   transform: translate(-56px, 58px);   animation-delay: 0.675s; }
+.splash-lights .light:nth-child(29) { --tx: -85px;  --ty: 58px;   transform: translate(-85px, 58px);   animation-delay: 0.7s;   }
+.splash-lights .light:nth-child(30) { --tx: -113px; --ty: 58px;   transform: translate(-113px, 58px);  animation-delay: 0.725s; }
+.splash-lights .light:nth-child(31) { --tx: -141px; --ty: 58px;   transform: translate(-141px, 58px);  animation-delay: 0.75s;  }
+.splash-lights .light:nth-child(32) { --tx: -170px; --ty: 58px;   transform: translate(-170px, 58px);  animation-delay: 0.775s; }
+.splash-lights .light:nth-child(33) { --tx: -198px; --ty: 58px;   transform: translate(-198px, 58px);  animation-delay: 0.8s;   }
+.splash-lights .light:nth-child(34) { --tx: -198px; --ty: 29px;   transform: translate(-198px, 29px);  animation-delay: 0.825s; }
+.splash-lights .light:nth-child(35) { --tx: -198px; --ty: 0px;    transform: translate(-198px, 0);     animation-delay: 0.85s;   }
+.splash-lights .light:nth-child(36) { --tx: -198px; --ty: -29px;  transform: translate(-198px, -29px); animation-delay: 0.875s; }
+.splash-lights .light:nth-child(37) { --tx: -198px; --ty: 29px;   transform: translate(-198px, 29px);   animation-delay: 0.9s;   }
+.splash-lights .light:nth-child(38) { --tx: -198px; --ty: 0px;    transform: translate(-198px, 0);     animation-delay: 0.925s; }
+.splash-lights .light:nth-child(39) { --tx: -198px; --ty: -29px;  transform: translate(-198px, -29px); animation-delay: 0.95s;  }
+.splash-lights .light:nth-child(40) { --tx: -198px; --ty: -58px;  transform: translate(-198px, -58px);  animation-delay: 0.975s; }
+
+@keyframes lightPulse {
+    0%, 100% {
+        opacity: 0.5;
+        transform: translate(var(--tx), var(--ty)) scale(0.85);
+        box-shadow: 0 0 8px rgba(241, 196, 16, 0.5), 0 0 16px rgba(241, 196, 16, 0.2);
+    }
+    50% {
+        opacity: 1;
+        transform: translate(var(--tx), var(--ty)) scale(1.15);
+        box-shadow: 0 0 20px rgba(241, 196, 16, 1), 0 0 40px rgba(241, 196, 16, 0.5);
+    }
+}
+
+.splash-title {
+    position: relative;
+    z-index: 1;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3rem, 12vw, 5.5rem);
+    font-weight: 400;
+    color: #f1c40f;
+    letter-spacing: 0.08em;
+    text-shadow: 0 0 40px rgba(241, 196, 16, 0.4);
+    margin: 0;
+    opacity: 0;
+    animation: splashTitleIn 0.8s ease-out forwards, bibleFunGlowPulse 2.2s ease-in-out 0.8s infinite;
+}
+
+@keyframes titleFramePulse {
+    0%, 100% {
+        opacity: 0.4;
+        box-shadow: 0 0 20px rgba(241, 196, 16, 0.1);
+    }
+    50% {
+        opacity: 0.9;
+        box-shadow: 0 0 40px rgba(241, 196, 16, 0.25);
+    }
+}
+
+@keyframes titleGlowPulse {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+}
+
+
+.splash-line {
+    margin: 0;
+    letter-spacing: 0.05em;
+    animation: splashTaglineIn 0.5s ease-out forwards;
+    opacity: 0;
+}
+
+.splash-line-1 {
+    font-size: clamp(0.85rem, 2.4vw, 1.1rem);
+    color: rgba(255, 255, 255, 0.95);
+    margin-top: 20px;
+    animation-delay: 0.35s;
+}
+
+.splash-line-2 {
+    font-size: clamp(0.95rem, 2.8vw, 1.2rem);
+    color: rgba(255, 255, 255, 0.85);
+    margin-top: 8px;
+    animation-delay: 0.5s;
+}
+
+.splash-line-3 {
+    font-size: clamp(0.85rem, 2.2vw, 1rem);
+    color: rgba(255, 255, 255, 0.7);
+    margin-top: 6px;
+    margin-bottom: 40px;
+    animation-delay: 0.65s;
+}
+
+.splash-enter {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.5rem;
+    letter-spacing: 0.15em;
+    color: #0a0a2e;
+    background: #f1c40f;
+    border: none;
+    padding: 14px 48px;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 0 30px rgba(241, 196, 16, 0.5);
+    animation: splashBtnIn 0.5s ease-out 0.8s forwards, splashBtnGlow 2s ease-in-out 1.5s infinite;
+    opacity: 0;
+}
+
+.splash-enter:hover {
+    background: #f7d84d;
+    box-shadow: 0 0 40px rgba(241, 196, 16, 0.7);
+    transform: scale(1.05);
+}
+
+@keyframes splashTitleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.85);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes splashTaglineIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes splashBtnIn {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes splashBtnGlow {
+    0%, 100% { box-shadow: 0 0 30px rgba(241, 196, 16, 0.5); }
+    50% { box-shadow: 0 0 45px rgba(241, 196, 16, 0.8); }
+}
+
+/* VIDEO OVERLAY */
+#video-intro-container {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: black;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#intro-video { width: 100%; max-width: 1200px; }
+
+.skip-btn {
+    position: absolute; bottom: 30px; right: 30px;
+    background: rgba(255,255,255,0.1); color: white;
+    border: 1px solid white; padding: 10px 20px;
+    cursor: pointer; border-radius: 5px;
+}
+
+/* JEOPARDY SCOREBOARD FIX */
+#j-turn-display {
+    display: flex;
+    justify-content: space-around;
+    gap: 15px;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.player-score-box {
+    background: rgba(255, 255, 255, 0.06);
+    padding: 10px;
+    border-radius: 8px;
+    border: 2px solid rgba(241, 196, 16, 0.3);
+    flex: 1;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.player-score-box.active-player {
+    border-color: #f1c40f;
+    background: rgba(241, 196, 16, 0.15);
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(241, 196, 16, 0.2);
+}
+
+.p-name { display: block; font-size: 0.75rem; color: rgba(255, 255, 255, 0.7); }
+.p-amount { display: block; font-size: 1.4rem; font-weight: bold; color: #f1c40f; }
+
+/* FADE IN EFFECT */
+.fade-in { animation: fadeInEffect 1.5s forwards; }
+@keyframes fadeInEffect {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* ========== MAIN APP (epic menu – same theme as splash) ========== */
+.game-container {
+    width: 100%; max-width: 720px;
+    background: linear-gradient(180deg, rgba(20, 20, 55, 0.97) 0%, rgba(12, 12, 38, 0.98) 100%);
+    padding: 32px 24px;
+    border-radius: 16px;
+    border: 2px solid rgba(241, 196, 16, 0.55);
+    box-shadow: 0 0 50px rgba(241, 196, 16, 0.12), 0 0 0 1px rgba(241, 196, 16, 0.1) inset, 0 20px 50px rgba(0, 0, 0, 0.5);
+    text-align: center;
+    color: rgba(255, 255, 255, 0.92);
+    animation: menuFadeIn 0.5s ease-out;
+}
+
+@keyframes menuFadeIn {
+    from { opacity: 0; transform: scale(0.98); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+/* Game intro splash – shown while announcer speaks */
+.game-intro-splash {
+    padding: 48px 24px;
+    text-align: center;
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+}
+.game-intro-splash.hidden { display: none !important; }
+.game-intro-splash-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2rem, 7vw, 3rem);
+    color: #f1c40f;
+    letter-spacing: 0.08em;
+    margin: 0;
+    text-shadow: 0 0 30px rgba(241, 196, 16, 0.4);
+    animation: bibleFunGlowPulse 2.2s ease-in-out infinite;
+}
+.game-intro-splash-subtitle {
+    font-size: 1.15rem;
+    color: rgba(255, 255, 255, 0.9);
+    letter-spacing: 0.08em;
+    margin: 0;
+}
+
+.menu-header {
+    margin-bottom: 28px;
+}
+
+.app-subtitle {
+    font-size: 1.2rem;
+    color: rgba(255, 255, 255, 0.85);
+    letter-spacing: 0.08em;
+    margin: 6px 0 0;
+}
+
+.menu-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.2rem, 8vw, 3.2rem);
+    font-weight: 400;
+    color: #f1c40f;
+    letter-spacing: 0.06em;
+    text-shadow: 0 0 30px rgba(241, 196, 16, 0.35);
+    margin: 0;
+    animation: bibleFunGlowPulse 2.2s ease-in-out infinite;
+}
+
+/* Shared pulsing glow for "Bible Fun" title (splash + menu) */
+@keyframes bibleFunGlowPulse {
+    0%, 100% {
+        text-shadow: 0 0 20px rgba(241, 196, 16, 0.35), 0 0 40px rgba(241, 196, 16, 0.15);
+    }
+    50% {
+        text-shadow: 0 0 35px rgba(241, 196, 16, 0.6), 0 0 60px rgba(241, 196, 16, 0.3);
+    }
+}
+
+.menu-subtitle {
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.7);
+    letter-spacing: 0.08em;
+    margin: 8px 0 0;
+}
+
+#menu {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.menu-btn {
+    background: rgba(241, 196, 16, 0.06);
+    color: rgba(255, 255, 255, 0.95);
+    border: 2px solid rgba(241, 196, 16, 0.45);
+    padding: 16px 20px;
+    font-size: 1.05rem;
+    letter-spacing: 0.04em;
+    transition: background 0.2s, border-color 0.2s, box-shadow 0.2s, transform 0.15s;
+}
+
+.menu-btn:hover {
+    background: rgba(241, 196, 16, 0.2);
+    border-color: #f1c40f;
+    box-shadow: 0 0 25px rgba(241, 196, 16, 0.3);
+    transform: scale(1.02);
+}
+
+.menu-btn-jeopardy {
+    border-color: rgba(241, 196, 16, 0.7);
+    background: rgba(241, 196, 16, 0.12);
+    color: #f1c40f;
+}
+
+.menu-btn-jeopardy:hover {
+    background: rgba(241, 196, 16, 0.25);
+    box-shadow: 0 0 30px rgba(241, 196, 16, 0.4);
+}
+
+.volume-container {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(241, 196, 16, 0.2);
+}
+
+.sound-switch-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 0;
+}
+
+.sound-switch-row .volume-label {
+    margin-bottom: 0;
+}
+
+.sound-state-label {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.7);
+    min-width: 24px;
+}
+
+/* Toggle switch */
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 44px;
+    height: 24px;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 24px;
+    transition: 0.25s;
+}
+
+.toggle-slider::before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
+    transition: 0.25s;
+}
+
+.toggle-switch input:checked + .toggle-slider {
+    background: rgba(241, 196, 16, 0.4);
+    box-shadow: 0 0 12px rgba(241, 196, 16, 0.3);
+}
+
+.toggle-switch input:checked + .toggle-slider::before {
+    transform: translateX(20px);
+    background: #f1c40f;
+    box-shadow: 0 0 8px rgba(241, 196, 16, 0.6);
+}
+
+.volume-slider-wrap {
+    margin-top: 12px;
+}
+
+.volume-slider-wrap.hidden {
+    display: none !important;
+}
+
+.volume-label {
+    display: block;
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.6);
+    letter-spacing: 0.05em;
+    margin-bottom: 8px;
+}
+
+.volume-slider {
+    width: 100%;
+    height: 8px;
+    -webkit-appearance: none;
+    appearance: none;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    outline: none;
+}
+
+.volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #f1c40f;
+    cursor: pointer;
+    box-shadow: 0 0 12px rgba(241, 196, 16, 0.5);
+}
+
+.volume-slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #f1c40f;
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 0 12px rgba(241, 196, 16, 0.5);
+}
+
+.hidden { display: none !important; }
+
+#finish-screen { padding-top: 8px; }
+#finish-screen .result-row { border-left: none; padding-left: 0; }
+
+/* Setup screens – compact on desktop, full width on small screens */
+.global-settings {
+    text-align: left;
+    margin: 15px auto;
+    max-width: 340px;
+    width: 100%;
+}
+.setting-item { margin: 12px 0; }
+.setting-item label { display: block; font-size: 0.9rem; color: rgba(255, 255, 255, 0.85); margin-bottom: 4px; }
+.setting-item input,
+.setting-item select {
+    width: 100%;
+    max-width: 100%;
+    padding: 8px 12px;
+    border: 1px solid rgba(241, 196, 16, 0.4);
+    border-radius: 6px;
+    font-size: 1rem;
+    background: rgba(255, 255, 255, 0.95);
+    color: #1a1a2e;
+    box-sizing: border-box;
+}
+
+.t-players-container { max-height: 280px; overflow-y: auto; padding-right: 6px; }
+.t-player-row { align-items: center; gap: 10px; margin-bottom: 10px; }
+.t-player-num { font-weight: bold; color: rgba(241, 196, 16, 0.9); min-width: 1.5em; flex-shrink: 0; }
+.t-icon-select { width: 100%; max-width: 220px; font-size: 1rem; padding: 8px 10px; }
+.t-color-select { width: 100%; max-width: 140px; }
+
+.t-toggle-label { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+.t-toggle-label input { width: auto; }
+.t-hint { font-size: 0.8rem; color: rgba(255,255,255,0.6); margin-top: 4px; }
+.t-battle-options { margin-top: 12px; padding-left: 8px; border-left: 2px solid rgba(241, 196, 16, 0.3); }
+.t-battle-block { margin-top: 10px; }
+.t-clan-picks { display: flex; flex-direction: column; gap: 10px; margin-top: 8px; }
+.t-clan-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.t-clan-label { font-weight: 600; color: rgba(241, 196, 16, 0.9); min-width: 4.5em; }
+.t-clan-select { width: 100%; max-width: 220px; font-size: 1rem; padding: 8px 10px; border: 1px solid rgba(241, 196, 16, 0.4); border-radius: 6px; background: rgba(255, 255, 255, 0.95); color: #1a1a2e; box-sizing: border-box; }
+.t-clan-turn { color: #f1c40f; }
+
+/* Setup screen: constrain buttons to form width */
+#setup-screen .btn,
+#setup-screen .btn-outline {
+    max-width: 340px;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
+/* Subtle “how to play” hint (e.g. Prophetic Pairs) – recedes into background */
+#setup-screen .setup-hint {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.5);
+    margin: 0 0 1.25rem;
+    line-height: 1.45;
+    font-weight: normal;
+    max-width: 340px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.btn { width: 100%; padding: 15px; margin: 10px 0; font-size: 1.1rem; font-weight: bold; color: #f1c40f; background: rgba(26, 26, 60, 0.9); border: 2px solid rgba(241, 196, 16, 0.4); border-radius: 8px; cursor: pointer; }
+.game-container .btn:not(.menu-btn) { background: rgba(241, 196, 16, 0.9); color: #0a0a2e; border: 2px solid transparent; }
+.game-container .btn:not(.menu-btn):hover { background: #f1c40f; box-shadow: 0 0 20px rgba(241, 196, 16, 0.4); }
+.btn-outline { background: none; border: 2px solid rgba(241, 196, 16, 0.4); color: rgba(255, 255, 255, 0.85); padding: 10px; margin-top: 15px; width: 100%; border-radius: 8px; cursor: pointer; }
+.game-container .btn-outline { border-color: rgba(241, 196, 16, 0.5); color: rgba(255, 255, 255, 0.9); }
+.game-container .btn-outline:hover { border-color: #f1c40f; color: #fff; background: rgba(241, 196, 16, 0.1); }
+
+/* Prophetic Pairs – two columns with divider and clear selected state */
+.match-grid {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 0;
+    margin-bottom: 20px;
+    align-items: stretch;
+}
+.match-col {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.match-divider {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 0 14px;
+    min-width: 56px;
+    border-left: 2px solid rgba(241, 196, 16, 0.4);
+    border-right: 2px solid rgba(241, 196, 16, 0.4);
+}
+.match-label {
+    font-size: 0.75rem;
+    color: rgba(241, 196, 16, 0.9);
+    letter-spacing: 0.06em;
+    white-space: nowrap;
+}
+.match-arrow {
+    font-size: 1.1rem;
+    color: rgba(241, 196, 16, 0.75);
+    line-height: 1;
+}
+.match-btn {
+    min-height: 48px;
+    padding: 12px 10px;
+    font-size: 0.9rem;
+    box-sizing: border-box;
+    border: 2px solid rgba(241, 196, 16, 0.4);
+}
+.match-btn-selected {
+    outline: 3px solid #f1c40f;
+    outline-offset: 2px;
+    background: rgba(241, 196, 16, 0.2) !important;
+    box-shadow: 0 0 16px rgba(241, 196, 16, 0.4);
+}
+
+/* Testament Timeline – instruction and theme-matched layout */
+.timeline-instruction {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.65);
+    margin: 0 0 12px;
+    font-weight: normal;
+}
+.timeline-slots {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+.timeline-preview {
+    font-weight: bold;
+    color: rgba(241, 196, 16, 0.95);
+    min-height: 1.5em;
+    margin-bottom: 10px;
+}
+.game-container .timeline-option-btn {
+    margin: 0;
+}
+
+.jeopardy-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr); 
+    gap: 8px;
+    margin: 20px 0;
+}
+
+.j-header { background: rgba(20, 20, 55, 0.95); color: #f1c40f; font-size: 0.65rem; padding: 10px 2px; border-radius: 4px; border: 1px solid rgba(241, 196, 16, 0.4); }
+.j-cell { background: rgba(40, 40, 90, 0.9); color: #f1c40f; font-size: 1.1rem; padding: 15px 2px; border-radius: 4px; cursor: pointer; border: 1px solid rgba(241, 196, 16, 0.35); transition: background 0.2s; }
+.j-cell:hover { background: rgba(241, 196, 16, 0.2); }
+.j-cell.used { background: rgba(15, 15, 40, 0.95); color: transparent; cursor: default; border-color: rgba(241, 196, 16, 0.15); }
+.j-answer-hint { font-size: 0.9rem; color: rgba(255, 255, 255, 0.8); margin: 0 0 12px; }
+.j-answer-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 12px;
+    max-width: 100%;
+}
+.j-answer-row .j-ans-input {
+    flex: 1;
+    min-width: 0;
+    width: 0;
+    margin: 0;
+    padding: 10px 12px;
+    font-size: 1rem;
+    font-weight: normal;
+    background: rgba(255,255,255,0.95);
+    color: #1a1a2e;
+    border: 2px solid rgba(241,196,16,0.5);
+    border-radius: 8px;
+    box-sizing: border-box;
+}
+.j-answer-row .j-mic-btn {
+    flex-shrink: 0;
+    width: auto;
+    margin: 0;
+    padding: 10px 14px;
+    font-size: 0.9rem;
+    white-space: nowrap;
+}
+
+.status-bar { display: flex; justify-content: space-between; font-size: 0.9rem; color: rgba(255, 255, 255, 0.75); margin-bottom: 10px; }
+.card { background: #f8f9fa; padding: 20px; border-radius: 10px; border: 1px solid #e9ecef; margin-top: 15px; }
+.game-container .card { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(241, 196, 16, 0.25); }
+.game-container .status-bar { color: rgba(255, 255, 255, 0.8); }
