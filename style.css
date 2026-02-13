@@ -1,4 +1,4 @@
-/* Bible Fun v2.0.0 Master Stylesheet */
+/* Bible Fun v2.0.1 Master Stylesheet */
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -32,6 +32,7 @@ body {
     position: relative;
     display: inline-block;
     padding: 0.15em 0;
+    margin-bottom: 90px; /* reserve space so taglines sit below the light ring */
 }
 
 .splash-lights {
@@ -109,6 +110,31 @@ body {
     }
 }
 
+/* Mobile: shrink light ring so it stays around title and doesn’t overlap taglines */
+@media (max-width: 600px) {
+    .splash-title-wrap {
+        margin-bottom: 88px;
+    }
+    .splash-lights {
+        transform: scale(0.55);
+        transform-origin: center center;
+    }
+}
+
+/* Portrait (narrow width): keep lights well inside left/right edges, not at screen edge */
+@media (max-width: 430px) {
+    .splash-lights {
+        transform: scale(0.42);
+        transform-origin: center center;
+    }
+}
+@media (max-width: 380px) {
+    .splash-lights {
+        transform: scale(0.36);
+        transform-origin: center center;
+    }
+}
+
 .splash-title {
     position: relative;
     z-index: 1;
@@ -150,7 +176,7 @@ body {
 .splash-line-1 {
     font-size: clamp(0.85rem, 2.4vw, 1.1rem);
     color: rgba(255, 255, 255, 0.95);
-    margin-top: 20px;
+    margin-top: 0; /* space from lights comes from .splash-title-wrap margin-bottom */
     animation-delay: 0.35s;
 }
 

@@ -46,7 +46,7 @@ const BlanksGame = {
                     <div id="b-individuals-block" class="t-battle-block">
                         <div class="setting-item">
                             <label>Number of Players</label>
-                            <select id="b-pcount" onchange="BlanksGame.togglePlayerRows()">${Array.from({ length: 20 }, (_, i) => `<option value="${i + 1}">${i + 1} Player${i !== 0 ? 's' : ''}</option>`).join('')}</select>
+                            <select id="b-pcount" onchange="BlanksGame.togglePlayerRows()">${Array.from({ length: 20 }, (_, i) => `<option value="${i + 1}"${i === 1 ? ' selected' : ''}>${i + 1} Player${i !== 0 ? 's' : ''}</option>`).join('')}</select>
                         </div>
                         <div class="setting-item">
                             <label>Pick an icon for each player</label>
