@@ -1,4 +1,4 @@
-/* Bible Fun v2.0.6 - Prophetic Pairs */
+/* Bible Fun v2.0.7 - Prophetic Pairs */
 const MatchingGame = {
     selectedLeft: null,
     pairs: {},

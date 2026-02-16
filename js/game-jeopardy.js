@@ -1,4 +1,4 @@
-/* Bible Fun v2.0.6 - Jeopardy with Epic Video Intro */
+/* Bible Fun v2.0.7 - Jeopardy with Epic Video Intro */
 const JeopardyGame = {
     activeClue: null,
     topics: [], // Filled from BibleDatabase so every category has questions
@@ -373,28 +373,27 @@ const JeopardyGame = {
         this._clueSplashVal = null;
         this._currentClueVal = val;
 
-        document.getElementById('game-play').classList.remove('hidden');
         const cur = GameManager.players[this.currentPlayerIndex];
         const curName = cur.name || ('Player ' + (this.currentPlayerIndex + 1));
         const cat = this.activeClue && this.activeClue.topic ? this.activeClue.topic : '';
-        document.getElementById('display-player-name').innerText = `${curName}: ${cat} for $${val}`;
         const clueText = this.activeClue.clue || this.activeClue.q;
-        document.getElementById('question-box').innerText = clueText;
-        document.getElementById('feedback').innerText = '';
 
-        const optCont = document.getElementById('options-container');
-        optCont.innerHTML = `
-            <p class="j-answer-hint">Answer in the form: <strong>Who is ___ ?</strong> or <strong>What is ___ ?</strong></p>
-            <div class="j-answer-row">
-                <input type="text" id="j-ans" class="btn j-ans-input" placeholder="e.g. Who is Moses? or What is Bethlehem?">
-                <button type="button" class="btn j-mic-btn" id="j-mic-btn" title="Speak your answer" onclick="JeopardyGame.startVoiceInput()">🎤 Speak</button>
-            </div>
-            <button class="btn" onclick="JeopardyGame.check(${val})">Submit Answer</button>
-        `;
-
-        // Don't auto-focus: cursor/keyboard only when user taps the field (avoids keyboard taking half screen on mobile)
-        // Wait for blue splash to disappear and answer screen to paint on mobile, then speak
-        const speakAfterClue = function() {
+        // On mobile the blue splash can stay visible; wait for it to disappear before showing answer screen, then speak
+        const self = this;
+        const showAnswerAndSpeak = function() {
+            document.getElementById('game-play').classList.remove('hidden');
+            document.getElementById('display-player-name').innerText = `${curName}: ${cat} for $${val}`;
+            document.getElementById('question-box').innerText = clueText;
+            document.getElementById('feedback').innerText = '';
+            const optCont = document.getElementById('options-container');
+            optCont.innerHTML = `
+                <p class="j-answer-hint">Answer in the form: <strong>Who is ___ ?</strong> or <strong>What is ___ ?</strong></p>
+                <div class="j-answer-row">
+                    <input type="text" id="j-ans" class="btn j-ans-input" placeholder="e.g. Who is Moses? or What is Bethlehem?">
+                    <button type="button" class="btn j-mic-btn" id="j-mic-btn" title="Speak your answer" onclick="JeopardyGame.startVoiceInput()">🎤 Speak</button>
+                </div>
+                <button class="btn" onclick="JeopardyGame.check(${val})">Submit Answer</button>
+            `;
             requestAnimationFrame(function() {
                 requestAnimationFrame(function() {
                     setTimeout(function() {
@@ -403,7 +402,7 @@ const JeopardyGame = {
                 });
             });
         };
-        speakAfterClue();
+        setTimeout(showAnswerAndSpeak, 1200);
     },
 
     startVoiceInput: function() {

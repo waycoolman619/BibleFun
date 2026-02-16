@@ -1,4 +1,4 @@
-/* Bible Fun v2.0.6 - Timeline/Sequence Cartridge */
+/* Bible Fun v2.0.7 - Timeline/Sequence Cartridge */
 const SequenceGame = {
     questions: [],
     currentIndex: 0,

@@ -1,4 +1,4 @@
-/* Bible Fun v2.0.6 - Master Database (250+ Items) */
+/* Bible Fun v2.0.7 - Master Database (250+ Items) */
 const BibleDatabase = [
     // --- TOPIC: HEROES ---
     // clue = Jeopardy-style statement (host reads this; contestant says "Who is..." or "What is..."). Trivia/others use q and a.
