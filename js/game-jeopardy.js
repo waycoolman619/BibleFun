@@ -1,4 +1,4 @@
-/* Bible Fun v2.0.5 - Jeopardy with Epic Video Intro */
+/* Bible Fun v2.0.6 - Jeopardy with Epic Video Intro */
 const JeopardyGame = {
     activeClue: null,
     topics: [], // Filled from BibleDatabase so every category has questions
@@ -135,6 +135,7 @@ const JeopardyGame = {
         this.selectedCategory = null;
 
         document.getElementById('setup-screen').classList.add('hidden');
+        document.getElementById('main-app').classList.add('hidden');
 
         const videoCont = document.getElementById('video-intro-container');
         const video = document.getElementById('intro-video');
@@ -172,17 +173,22 @@ const JeopardyGame = {
             introSpeech.currentTime = 0;
         }
         videoCont.classList.add('hidden');
+        document.getElementById('main-app').classList.remove('hidden');
         
-        // Delay board show and speech so mobile has time to hide video and paint (avoids speech before transition)
+        // Long delay so mobile fully hides video before board and announcer (video must be gone before speech)
         const self = this;
-        setTimeout(function() {
-            const board = document.getElementById('jeopardy-board');
-            board.classList.remove('hidden');
-            board.classList.add('fade-in');
-            self.renderBoard();
-            const firstName = GameManager.players[0] && GameManager.players[0].name ? GameManager.players[0].name : 'Player 1';
-            GameManager.speakTurn(firstName + ', you can choose a category.', function() {});
-        }, 500);
+        requestAnimationFrame(function() {
+            requestAnimationFrame(function() {
+                setTimeout(function() {
+                    const board = document.getElementById('jeopardy-board');
+                    board.classList.remove('hidden');
+                    board.classList.add('fade-in');
+                    self.renderBoard();
+                    const firstName = GameManager.players[0] && GameManager.players[0].name ? GameManager.players[0].name : 'Player 1';
+                    GameManager.speakTurn(firstName + ', you can choose a category.', function() {});
+                }, 1200);
+            });
+        });
     },
 
     renderBoard: function() {
@@ -386,11 +392,18 @@ const JeopardyGame = {
             <button class="btn" onclick="JeopardyGame.check(${val})">Submit Answer</button>
         `;
 
-        // Delay speech so the answer screen has time to paint on mobile (avoids speaking before user sees it)
-        document.getElementById('j-ans').focus();
-        setTimeout(function() {
-            GameManager.speakTurn(curName + ', you can answer.', function() {});
-        }, 500);
+        // Don't auto-focus: cursor/keyboard only when user taps the field (avoids keyboard taking half screen on mobile)
+        // Wait for blue splash to disappear and answer screen to paint on mobile, then speak
+        const speakAfterClue = function() {
+            requestAnimationFrame(function() {
+                requestAnimationFrame(function() {
+                    setTimeout(function() {
+                        GameManager.speakTurn(curName + ', you can answer.', function() {});
+                    }, 1200);
+                });
+            });
+        };
+        speakAfterClue();
     },
 
     startVoiceInput: function() {
@@ -478,10 +491,7 @@ const JeopardyGame = {
         if (wrap) wrap.remove();
         document.getElementById('feedback').innerText = '';
         const input = document.getElementById('j-ans');
-        if (input) {
-            input.value = '';
-            input.focus();
-        }
+        if (input) input.value = '';
         const cur = GameManager.players[this.currentPlayerIndex];
         const curName = cur && cur.name ? cur.name : ('Player ' + (this.currentPlayerIndex + 1));
         GameManager.speakTurn(curName + ', try again. You can answer.', function() {});

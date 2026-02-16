@@ -252,7 +252,6 @@ const BlanksGame = {
         quitBtn.onclick = () => { if (confirm('Quit and return to menu? Your progress will be lost.')) GameManager.goToMenu(); };
         optCont.appendChild(quitBtn);
         const input = document.getElementById('b-ans');
-        input.focus();
         input.onkeyup = (e) => { if (e.key === 'Enter') BlanksGame.check(); };
     },
 
