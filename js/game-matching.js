@@ -1,4 +1,4 @@
-/* Bible Fun v2.0.3 - Prophetic Pairs */
+/* Bible Fun v2.0.4 - Prophetic Pairs */
 const MatchingGame = {
     selectedLeft: null,
     pairs: {},
@@ -7,7 +7,13 @@ const MatchingGame = {
 
     getSetupHTML: function() {
         return `
-            <p class="setup-hint">Select one item from the left column, then its partner on the right. Correct pairs disappear.</p>
+            <div class="global-settings">
+                <div class="setup-row setup-row-single">
+                    <div class="setup-card">
+                        <p class="setup-hint" style="margin:0; text-align:center;">Select one item from the left column, then its partner on the right. Correct pairs disappear.</p>
+                    </div>
+                </div>
+            </div>
             <button class="btn" onclick="MatchingGame.start()">Start Matching</button>
         `;
     },
@@ -55,8 +61,8 @@ const MatchingGame = {
             <button class="btn-outline" onclick="if(confirm('Quit game?')) GameManager.goToMenu()">Quit Game</button>
         `;
 
-        const left = Object.keys(this.pairs).sort(() => Math.random() - 0.5);
-        const right = Object.values(this.pairs).sort(() => Math.random() - 0.5);
+        const left = shuffleArray(Object.keys(this.pairs));
+        const right = shuffleArray(Object.values(this.pairs));
 
         left.forEach(val => {
             const b = document.createElement('button');

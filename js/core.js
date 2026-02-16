@@ -1,4 +1,4 @@
-/* Bible Fun v2.0.3 - Core Engine (Fixed Audio) */
+/* Bible Fun v2.0.4 - Core Engine (Fixed Audio) */
 /* Shared for Trivia, Fill in the Blank, Who Am I (Battle Mode: individuals = icon as name, teams = clan) */
 const GAME_ICONS = [
     { emoji: '🦁', label: 'Lion' }, { emoji: '🐻', label: 'Bear' }, { emoji: '🐼', label: 'Panda' },
@@ -16,6 +16,16 @@ const GAME_CLANS = [
     { emoji: '🐯', name: 'Tiger Clan' }, { emoji: '🦉', name: 'Owl Clan' },
     { emoji: '🐴', name: 'Horse Clan' }, { emoji: '🦂', name: 'Scorpion Clan' }
 ];
+
+// Fisher-Yates shuffle for uniform random order (used by all games to avoid biased sort-with-random).
+function shuffleArray(arr) {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+}
 
 const GameManager = {
     activeGame: null,
@@ -98,11 +108,11 @@ const GameManager = {
         return this._voicesCache.length ? this._voicesCache : list || [];
     },
 
-    // Pick a voice based on menu "Voice: Male / Female". Include mobile voice names (iOS: Aaron, Fred, Alex = male; Samantha, Nicky = female).
+    // Pick a voice: Jeopardy uses male (host style); all other games use female. Menu shows Female only.
     getPreferredVoice: function(voices) {
         const list = voices && voices.length ? voices : this.getVoices();
         if (!list.length) return null;
-        const style = (document.getElementById('voice-style') || {}).value || 'male';
+        const useMale = this.activeGame && this.games['jeopardy'] && this.activeGame === this.games['jeopardy'];
         const en = v => v.lang && v.lang.startsWith('en');
         const enUS = v => v.lang && (v.lang.startsWith('en-US') || v.lang.startsWith('en_US'));
         const name = v => (v.name || '').toLowerCase();
@@ -114,18 +124,17 @@ const GameManager = {
             const n = name(v);
             return n.includes('female') || n.includes('samantha') || n.includes('nicky') || n.includes('zira') || n.includes('karen') || n.includes('victoria') || n.includes('woman') || n.includes('martha') || n.includes('moira') || n.includes('tessa') || n.includes('catherine');
         };
-        if (style === 'female') {
-            return list.find(v => en(v) && isFemaleName(v)) ||
-                list.find(v => enUS(v) && isFemaleName(v)) ||
+        if (useMale) {
+            return list.find(v => en(v) && isMaleName(v)) ||
+                list.find(v => enUS(v) && isMaleName(v)) ||
+                list.find(v => enUS(v) && !isFemaleName(v)) ||
                 list.find(v => enUS(v)) ||
+                list.find(v => en(v) && !isFemaleName(v)) ||
                 list.find(v => en(v));
         }
-        // Male: prefer named male, then any en-US that is not a known female (avoids defaulting to female on mobile).
-        return list.find(v => en(v) && isMaleName(v)) ||
-            list.find(v => enUS(v) && isMaleName(v)) ||
-            list.find(v => enUS(v) && !isFemaleName(v)) ||
+        return list.find(v => en(v) && isFemaleName(v)) ||
+            list.find(v => enUS(v) && isFemaleName(v)) ||
             list.find(v => enUS(v)) ||
-            list.find(v => en(v) && !isFemaleName(v)) ||
             list.find(v => en(v));
     },
 

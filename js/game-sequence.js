@@ -1,4 +1,4 @@
-/* Bible Fun v2.0.3 - Timeline/Sequence Cartridge */
+/* Bible Fun v2.0.4 - Timeline/Sequence Cartridge */
 const SequenceGame = {
     questions: [],
     currentIndex: 0,
@@ -9,17 +9,28 @@ const SequenceGame = {
         return `
             <p class="setup-hint">Drag or click the events into the correct chronological order.</p>
             <div class="global-settings">
-                <div class="setting-item">
-                    <label>Number of Rounds</label>
-                    <select id="s-count">
-                        <option value="1">1 Round</option>
-                        <option value="2">2 Rounds</option>
-                        <option value="3">3 Rounds</option>
-                    </select>
+                <div class="setup-row setup-row-single">
+                    <div class="setup-card">
+                        <span class="setup-card-label">Number of Rounds</span>
+                        <div class="option-tiles">
+                            <button type="button" class="option-tile selected" data-value="1" onclick="SequenceGame.pickCount(1)">1</button>
+                            <button type="button" class="option-tile" data-value="2" onclick="SequenceGame.pickCount(2)">2</button>
+                            <button type="button" class="option-tile" data-value="3" onclick="SequenceGame.pickCount(3)">3</button>
+                        </div>
+                        <select id="s-count" aria-hidden="true" style="position:absolute;opacity:0;height:0;width:0"><option value="1" selected>1</option><option value="2">2</option><option value="3">3</option></select>
+                    </div>
                 </div>
             </div>
             <button class="btn" onclick="SequenceGame.start()">Start Timeline</button>
         `;
+    },
+
+    pickCount: function(n) {
+        const sel = document.getElementById('s-count');
+        if (sel) sel.value = String(n);
+        document.querySelectorAll('.setup-card .option-tile').forEach(t => {
+            t.classList.toggle('selected', parseInt(t.getAttribute('data-value'), 10) === n);
+        });
     },
 
     start: function() {
@@ -34,7 +45,15 @@ const SequenceGame = {
             return;
         }
 
-        this.questions = pool.sort(() => 0.5 - Math.random()).slice(0, count);
+        const seen = new Set();
+        pool = pool.filter(q => {
+            const key = (q.q || '').trim().toLowerCase();
+            if (seen.has(key)) return false;
+            seen.add(key);
+            return true;
+        });
+        pool = shuffleArray(pool);
+        this.questions = pool.slice(0, Math.min(count, pool.length));
         this.currentIndex = 0;
         this.score = 0;
         GameManager.players = [{ name: "Player 1", score: 0 }];
@@ -61,7 +80,7 @@ const SequenceGame = {
         
         this.currentUserOrder = [];
         // Shuffle the options so they aren't in the right order to start
-        const shuffledOptions = [...q.a].sort(() => 0.5 - Math.random());
+        const shuffledOptions = shuffleArray([...q.a]);
         
         const optCont = document.getElementById('options-container');
         optCont.innerHTML = `

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bible Fun - v2.0.3</title>
+    <title>Bible Fun - v2.0.4</title>
     <link rel="icon" href="favicon.svg" type="image/svg+xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -37,6 +37,9 @@
         <video id="intro-video">
             <source src="default-video.mp4" type="video/mp4">
         </video>
+        <audio id="jeopardy-intro-speech" preload="auto">
+            <source src="sounds/jeopardy-intro.mp3" type="audio/mpeg">
+        </audio>
         <button class="skip-btn" onclick="JeopardyGame.skipVideo()">Skip Intro</button>
     </div>
 
@@ -65,13 +68,6 @@
                     <label class="volume-label" for="volume-slider">Volume</label>
                     <input type="range" id="volume-slider" class="volume-slider" min="0" max="1" step="0.1" value="0.8">
                 </div>
-                <div class="setting-item sound-switch-row" style="margin-top:12px;">
-                    <span class="volume-label" style="margin-bottom:0;">Voice</span>
-                    <select id="voice-style" class="t-icon-select" style="min-width:120px;">
-                        <option value="male">Male</option>
-                        <option value="female">Female</option>
-                    </select>
-                </div>
             </div>
         </div>
 
@@ -87,8 +83,13 @@
 
         <div id="jeopardy-board" class="hidden">
             <div id="j-turn-display"></div>
+            <div id="j-choose-row" class="j-choose-row"></div>
             <div id="j-grid" class="jeopardy-grid"></div>
             <button class="btn-outline" onclick="GameManager.goToMenu()">Quit Board</button>
+        </div>
+
+        <div id="j-clue-splash" class="j-clue-splash hidden" onclick="JeopardyGame.dismissClueSplash()">
+            <p id="j-clue-splash-text" class="j-clue-splash-text"></p>
         </div>
 
         <div id="game-play" class="hidden">
