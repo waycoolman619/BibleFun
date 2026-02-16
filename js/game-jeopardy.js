@@ -1,4 +1,4 @@
-/* Bible Fun v2.0.4 - Jeopardy with Epic Video Intro */
+/* Bible Fun v2.0.5 - Jeopardy with Epic Video Intro */
 const JeopardyGame = {
     activeClue: null,
     topics: [], // Filled from BibleDatabase so every category has questions
@@ -173,16 +173,16 @@ const JeopardyGame = {
         }
         videoCont.classList.add('hidden');
         
-        // Show board with fade-in effect
-        const board = document.getElementById('jeopardy-board');
-        board.classList.remove('hidden');
-        board.classList.add('fade-in');
-        
-        this.renderBoard();
-
-        // Go straight to the first player: "[Name], you can choose a category."
-        const firstName = GameManager.players[0] && GameManager.players[0].name ? GameManager.players[0].name : 'Player 1';
-        GameManager.speakTurn(firstName + ', you can choose a category.', function() {});
+        // Delay board show and speech so mobile has time to hide video and paint (avoids speech before transition)
+        const self = this;
+        setTimeout(function() {
+            const board = document.getElementById('jeopardy-board');
+            board.classList.remove('hidden');
+            board.classList.add('fade-in');
+            self.renderBoard();
+            const firstName = GameManager.players[0] && GameManager.players[0].name ? GameManager.players[0].name : 'Player 1';
+            GameManager.speakTurn(firstName + ', you can choose a category.', function() {});
+        }, 500);
     },
 
     renderBoard: function() {
@@ -386,9 +386,11 @@ const JeopardyGame = {
             <button class="btn" onclick="JeopardyGame.check(${val})">Submit Answer</button>
         `;
 
-        // After splash: announcer says the player's name, then "you can answer"
-        GameManager.speakTurn(curName + ', you can answer.', function() {});
+        // Delay speech so the answer screen has time to paint on mobile (avoids speaking before user sees it)
         document.getElementById('j-ans').focus();
+        setTimeout(function() {
+            GameManager.speakTurn(curName + ', you can answer.', function() {});
+        }, 500);
     },
 
     startVoiceInput: function() {
@@ -446,21 +448,70 @@ const JeopardyGame = {
             GameManager.players[this.currentPlayerIndex].score += val;
             GameManager.playSound('correct');
             document.getElementById('feedback').innerText = "✅ Correct!";
+            this.currentPlayerIndex = (this.currentPlayerIndex + 1) % GameManager.players.length;
+            this._returnToBoard();
         } else {
             GameManager.playSound('wrong');
             document.getElementById('feedback').innerText = `❌ No, it was: ${this.activeClue.a}`;
+            this._showTryAgainButton();
+            this._returnToBoardAfterWrong();
         }
-        
-        this.currentPlayerIndex = (this.currentPlayerIndex + 1) % GameManager.players.length;
-        
-        setTimeout(() => {
+    },
+
+    _showTryAgainButton: function() {
+        const existing = document.querySelector('.j-try-again-wrap');
+        if (existing) existing.remove();
+        const row = document.querySelector('.j-answer-row');
+        if (!row) return;
+        const wrap = document.createElement('span');
+        wrap.className = 'j-try-again-wrap';
+        wrap.innerHTML = '<button type="button" class="btn j-try-again-btn" onclick="JeopardyGame.tryQuestionAgain()">Try this question again</button>';
+        row.appendChild(wrap);
+    },
+
+    tryQuestionAgain: function() {
+        if (this._returnToBoardTimeout) {
+            clearTimeout(this._returnToBoardTimeout);
+            this._returnToBoardTimeout = null;
+        }
+        const wrap = document.querySelector('.j-try-again-wrap');
+        if (wrap) wrap.remove();
+        document.getElementById('feedback').innerText = '';
+        const input = document.getElementById('j-ans');
+        if (input) {
+            input.value = '';
+            input.focus();
+        }
+        const cur = GameManager.players[this.currentPlayerIndex];
+        const curName = cur && cur.name ? cur.name : ('Player ' + (this.currentPlayerIndex + 1));
+        GameManager.speakTurn(curName + ', try again. You can answer.', function() {});
+    },
+
+    _returnToBoard: function() {
+        const self = this;
+        this._returnToBoardTimeout = setTimeout(function() {
+            self._returnToBoardTimeout = null;
             document.getElementById('game-play').classList.add('hidden');
             document.getElementById('jeopardy-board').classList.remove('hidden');
-            this.renderBoard();
-            const cur = GameManager.players[this.currentPlayerIndex];
-            const name = cur && cur.name ? cur.name : ('Player ' + (this.currentPlayerIndex + 1));
+            self.renderBoard();
+            const cur = GameManager.players[self.currentPlayerIndex];
+            const name = cur && cur.name ? cur.name : ('Player ' + (self.currentPlayerIndex + 1));
             GameManager.speakTurn(name + ', you can choose a category and a dollar amount.', function() {});
         }, 4000);
+    },
+
+    _returnToBoardAfterWrong: function() {
+        const self = this;
+        this._returnToBoardTimeout = setTimeout(function() {
+            self._returnToBoardTimeout = null;
+            self.currentPlayerIndex = (self.currentPlayerIndex + 1) % GameManager.players.length;
+            document.getElementById('game-play').classList.add('hidden');
+            document.getElementById('jeopardy-board').classList.remove('hidden');
+            self.renderBoard();
+            const cur = GameManager.players[self.currentPlayerIndex];
+            const name = cur && cur.name ? cur.name : ('Player ' + (self.currentPlayerIndex + 1));
+            GameManager.speakTurn(name + ', you can choose a category and a dollar amount.', function() {});
+        }, 6000);
     }
 };
 
